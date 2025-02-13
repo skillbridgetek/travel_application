@@ -1,0 +1,265 @@
+/* General Page Styling */body {
+
+    font-family: Arial, sans-serif;
+
+    background-color: #f4f4f4;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+/* Container */.container {
+
+    width: 80%;
+
+    margin: auto;
+
+    padding: 20px;
+
+    background: white;
+
+    border-radius: 5px;
+
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+
+}
+
+/* Header */.header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    background-color: #007bff;
+
+    padding: 15px;
+
+    color: white;
+
+}
+
+.logo {
+
+    font-size: 24px;
+
+    font-weight: bold;
+
+    text-decoration: none;
+
+    color: white;
+
+}
+
+.nav {
+
+    display: flex;
+
+    gap: 15px;
+
+}
+
+.nav-link {
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 16px;
+
+    padding: 8px 12px;
+
+    border-radius: 5px;
+
+}
+
+.nav-link:hover, .nav-link.active {
+
+    background-color: rgba(255, 255, 255, 0.2);
+
+}
+
+/* Form Styling */.form-container {
+
+    max-width: 500px;
+
+    margin: 20px auto;
+
+    background: white;
+
+    padding: 20px;
+
+    border-radius: 5px;
+
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+
+}
+
+textarea {
+
+    width: 95%;
+
+    padding: 12px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 5px;
+
+    font-size: 16px;
+
+    resize: none;
+
+    outline: none;
+
+}
+
+button {
+
+    background-color: #007bff;
+
+    color: white;
+
+    padding: 12px 20px;
+
+    border: none;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    border-radius: 5px;
+
+    margin-top: 10px;
+
+    width: 100%;
+
+}
+
+button:hover {
+
+    background-color: #0056b3;
+
+}
+
+/* Table Styling */table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 20px;
+
+    background: white;
+
+    border-radius: 5px;
+
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+
+}
+
+th, td {
+
+    padding: 12px;
+
+    border: 1px solid #ddd;
+
+    text-align: left;
+
+}
+
+th {
+
+    background-color: #007bff;
+
+    color: white;
+
+}
+
+tr:nth-child(even) {
+
+    background-color: #f2f2f2;
+
+}
+
+/* Status Tags */.status {
+
+    padding: 5px 10px;
+
+    border-radius: 5px;
+
+    font-weight: bold;
+
+}
+
+.open-status {
+
+    background-color: #28a745;
+
+    color: white;
+
+}
+
+.closed-status {
+
+    background-color: #dc3545;
+
+    color: white;
+
+}
+
+/* Chat Links */.chat-link {
+
+    color: #007bff;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    padding: 5px 10px;
+
+    border-radius: 5px;
+
+}
+
+.chat-link:hover {
+
+    text-decoration: underline;
+
+    background-color: #e6f0ff;
+
+}
+
+/* Closed Chat */.chat-closed {
+
+    color: gray;
+
+    font-weight: bold;
+
+}
+
+/* Responsive Design */@media screen and (max-width: 600px) {
+
+    .container {
+
+        width: 95%;
+
+        padding: 15px;
+
+    }
+
+    table {
+
+        font-size: 14px;
+
+    }
+
+    .nav {
+
+        flex-direction: column;
+
+    }
+
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Planning</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+    <header class="header">
+        <div class="container">
+            <a href="/" class="logo">Travel Planner</a>
+            <nav class="nav">
+                {% if session['role'] == 'user' or session['role'] == 'admin' %}
+                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link" href="/destinations">Destinations</a>
+                    <a class="nav-link" href="/hotels_display">Hotels</a>
+                    <a class="nav-link" href="/cart">My Cart</a>
+                    <a class="nav-link" href="/profile">Profile</a>
+                    <a class="nav-link signout" href="/signout">Signout</a>
+
+
+                {% else %}
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/destinations" class="nav-link">Destinations</a>
+                    <a href="/hotels_display" class="nav-link">Hotels</a>
+                    <a href="/signin" class="nav-link signin">Sign In</a>
+                    <a href="/signup" class="nav-link signup">Sign Up</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <!-- Search bar section (moved above) -->
+    <main class="hero">
+        <div class="container">
+            <h1 class="hero-title">Where to?</h1>
+            <form method="post" action="/" class="search-form" onsubmit="return validateForm()">
+                <div class="input-wrapper">
+                    <input type="text" name="search" placeholder="Places to go, things to do, hotels..." id="search-input" required />
+                    <button type="submit" class="search-btn">Search</button>
+                </div>
+                <div class="search-options">
+                    <a href="/" class="option">Places</a>
+                    <a href="/hotel_search" class="option">Hotels</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Places section -->
+    <section class="places-section">
+        <div class="container">
+            <h2>Dream Your Next Trip</h2>
+            <p>Weekend getaways from India</p>
+            <div class="places-container">
+                {% for place in places %}
+                <div class="place-card">
+                    <img src="{{ url_for('static', filename='images/travel.jpg') }}" alt="{{ place.name }}">
+                    <h3>{{ place.name }}</h3>
+                    <p>{{ place.location }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 Travel Planner - All Rights Reserved</p>
+            <div class="social-links">
+                <a href="#" class="social-link">Facebook</a>
+                <a href="#" class="social-link">Twitter</a>
+                <a href="#" class="social-link">Instagram</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function validateForm() {
+            var searchInput = document.getElementById('search-input').value;
+            if (searchInput.trim() === "") {
+                alert("Please enter a search term.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Tickets</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <a href="#" class="logo">Travel Planner</a>
+            <nav class="nav">
+                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" href="/destinations">Destinations</a>
+                <a class="nav-link" href="/hotels_display">Hotels</a>
+                <a class="nav-link" href="/cart">My Cart</a>
+                <a class="nav-link" href="/profile">Profile</a>
+                {% if session['role'] != 'admin' %}
+                    <a class="nav-link" href="/ticket">View Tickets</a>
+                {% endif %}
+                {% if session['role'] == 'admin' %}
+                    <a class="nav-link" href="/admin/tickets">View Tickets</a>
+                {% endif %}
+                <a class="nav-link" href="/signout">Signout</a>
+            </nav>
+        </div>
+
+    <h2>Manage Tickets</h2>
+    <table>
+        <tr>
+            <th>Ticket ID</th>
+            <th>User</th>
+            <th>Issue</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        {% for ticket in tickets %}
+        <tr>
+            <td>{{ ticket.id }}</td>
+            <td>{{ ticket.user_name }}</td>
+            <td>{{ ticket.complaint }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('update_ticket_status', ticket_id=ticket.id) }}">
+                    <select name="status" onchange="this.form.submit()">
+                        <option value="open" {% if ticket.status == 'open' %}selected{% endif %}>Open</option>
+                        <option value="closed" {% if ticket.status == 'closed' %}selected{% endif %}>Closed</option>
+                    </select>
+                </form>
+            </td>
+            <td>
+                {% if ticket.status == 'open' %}
+                    <a href="{{ url_for('chat', ticket_id=ticket.id) }}" class="chat-link">Chat</a>
+                {% else %}
+                    <span class="chat-closed">Chat Closed</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

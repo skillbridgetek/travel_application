@@ -1,0 +1,50 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    border-radius: 0;
+}
+
+.navbar .navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.navbar .nav-link {
+    font-size: 1rem;
+    margin-right: 15px;
+}
+
+h2 {
+    font-weight: bold;
+    color: #333;
+}
+
+.form-control {
+    border-radius: 0.25rem;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.text-center a {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.text-center a:hover {
+    text-decoration: underline;
+}

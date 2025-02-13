@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>All Destinations</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/destinations.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+            <a class="navbar-brand" href="/home">Travel Planner</a>
+            <div class="navbar-nav ml-auto">
+                <a class="nav-item nav-link" href="/">Home</a>
+                <a class="nav-link" href="/destinations">Destinations</a>
+                <a class="nav-link" href="/hotels_display">Hotels</a>
+                <a class="nav-link" href="/cart">My Cart</a>
+                <a class="nav-item nav-link" href="/profile">Profile</a>
+                <a class="nav-item nav-link" href="/signout">Sign Out</a>
+                {% if session['role'] == 'admin' %}
+                    <a class="nav-item nav-link btn btn-outline-success" href="/destinations/add">Add Destination</a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <div class="container">
+            <h1 class="mb-4">All Destinations</h1>
+            <div class="row">
+                {% for place in places %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='images/travel.jpg') }}" class="card-img-top" alt="{{ place.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="/destinations/{{ place.id }}">{{ place.name }}</a>
+                            </h5>
+                            <p class="card-text">{{ place.description }}</p>
+                            <p class="card-text">
+                                <span class="badge badge-primary">
+                                    {{ place.location }}
+                                </span>
+                            </p>
+                            {% if session['role'] == 'user' %}
+<!--                            <form method="POST" action="/cart/add">-->
+<!--                                <input type="hidden" name="place_id" value="{{ place.id }}">-->
+<!--                                <button type="submit" class="btn btn-primary">Add to Cart</button>-->
+<!--                            </form>-->
+                            {% endif %}
+                            {% if session['role'] == 'admin' %}
+                                <form method="POST" action="/destinations/remove/{{ place.id }}">
+                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Remove</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                     </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

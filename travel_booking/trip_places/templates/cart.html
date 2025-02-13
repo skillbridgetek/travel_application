@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/cart.css" />
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <a href="#" class="logo">Travel Planner</a>
+            <nav class="nav">
+                <a class="nav-link" href="/home">Home</a>
+                <a class="nav-link" href="/destinations">Destinations</a>
+                <a class="nav-link" href="/hotels_display">Hotels</a>
+                <a class="nav-link" href="/cart">My Cart</a>
+                <a class="nav-link" href="/profile">Profile</a>
+                <a class="nav-link" href="/signout">Signout</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container mt-5 pt-5">
+        <h1 class="my-4">Cart</h1>
+        <form method="POST" action="/cart/update">
+            <div class="row">
+                {% for item in cart_items %}
+                <div class="col-md-6 mb-4">
+                    <div class="card cart-item shadow-sm">
+                        <img src="{{ url_for('static', filename='images/travel.jpg') }}" class="card-img-top" alt="{{ item[2] }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item[2] }}</h5>
+                            <h6 class="card-text">{{ item[3] }}</h6>
+                            <h6 class="card-text">{{ item[4] }}</h6>
+                            <p class="card-text"><strong>Cost per person:</strong> {{ item[5] }}</p>
+
+                            <!-- Check-in Date -->
+                            <div class="form-group">
+                                <label for="check_in_{{ item[0] }}">Check-in Date</label>
+                                <input type="date"
+                                       class="form-control check-in required-field"
+                                       id="check_in_{{ item[0] }}"
+                                       name="check_in_{{ item[0] }}"
+                                       value="{{ item[8] }}"
+                                       required>
+                            </div>
+
+                            <!-- Check-out Date -->
+                            <div class="form-group">
+                                <label for="check_out_{{ item[0] }}">Check-out Date</label>
+                                <input type="date"
+                                       class="form-control check-out required-field"
+                                       id="check_out_{{ item[0] }}"
+                                       name="check_out_{{ item[0] }}"
+                                       value="{{ item[9] }}"
+                                       required>
+                            </div>
+
+                            <!-- Number of People -->
+                            <div class="form-group">
+                                <label for="people_{{ item[0] }}">Number of People</label>
+                                <input type="number"
+                                       class="form-control required-field people-field"
+                                       id="people_{{ item[0] }}"
+                                       name="people_{{ item[0] }}"
+                                       value="{{ item[6] }}"
+                                       min="1" required>
+                            </div>
+
+                            <!-- Number of Days -->
+                            <div class="form-group">
+                                <label for="days_{{ item[0] }}">Number of Days</label>
+                                <input type="number"
+                                       class="form-control days required-field"
+                                       id="days_{{ item[0] }}"
+                                       name="days_{{ item[0] }}"
+                                       value="{{ item[7] }}"
+                                       min="1" required readonly>
+                            </div>
+
+                            <div class="actions">
+                                <button type="submit" class="btn btn-primary mt-2">Update</button>
+                                <button type="submit" formaction="/cart/remove/{{ item[0] }}"
+                                        class="btn btn-danger mt-2 remove-btn">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </form>
+
+        <!-- Discount and Checkout Section -->
+        <div class="container mt-4">
+            <h2>Total Cost: <span id="total_cost">{{ total_cost }}</span></h2>
+<!--            {% if discount > 0 %}-->
+<!--                <h3 class="text-success">First-Time Discount Applied: -${{ discount }}</h3>-->
+<!--                <h2>Final Cost After Discount: <span id="final_cost">${{ final_price }}</span></h2>-->
+<!--            {% else %}-->
+<!--                <h2>Final Price: <span id="final_cost">${{ total_cost }}</span></h2>-->
+<!--            {% endif %}-->
+        </div>
+
+        <form method="POST" action="/cart/checkout" class="mt-3">
+            <button type="submit" class="btn btn-success">Checkout</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Function to calculate the number of days between two dates
+        function calculateDays(checkIn, checkOut) {
+            const checkInDate = new Date(checkIn);
+            const checkOutDate = new Date(checkOut);
+            const timeDifference = checkOutDate - checkInDate;
+            const days = timeDifference / (1000 * 60 * 60 * 24);
+            return days > 0 ? days : 0;
+        }
+
+        // Auto-update days field when check-in or check-out changes
+        $('.check-in, .check-out').on('change', function() {
+            const parentCard = $(this).closest('.cart-item');
+            const checkIn = parentCard.find('.check-in').val();
+            const checkOut = parentCard.find('.check-out').val();
+            const daysField = parentCard.find('.days');
+
+            if (checkIn && checkOut) {
+                const days = calculateDays(checkIn, checkOut);
+                daysField.val(days);
+            }
+        });
+
+        // Remove required and min attributes when clicking "Remove"
+        $('.remove-btn').on('click', function(event) {
+            const parentCard = $(this).closest('.cart-item');
+
+            // Remove required validation only for this item
+            parentCard.find('.required-field').each(function () {
+                $(this).removeAttr('required').attr('data-required', 'true');
+            });
+
+            parentCard.find('[min]').each(function () {
+                $(this).removeAttr('min').attr('data-min', '1');
+            });
+
+            // Allow form submission without validation for this item
+            setTimeout(() => {
+                parentCard.find('[data-required="true"]').each(function () {
+                    $(this).attr('required', true);
+                });
+
+                parentCard.find('[data-min="1"]').each(function () {
+                    $(this).attr('min', '1');
+                });
+            }, 500);
+        });
+
+        // Before submitting the form, ensure only required fields remain
+        $('form').on('submit', function(event) {
+            $('.cart-item').each(function() {
+                if (!$(this).find('.remove-btn').is(':focus')) {
+                    $(this).find('.required-field').attr('required', true);
+                    $(this).find('[data-min="1"]').attr('min', '1');
+                }
+            });
+        });
+    });
+</script>
+
+
+</body>
+</html>

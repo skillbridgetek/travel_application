@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submit a Ticket</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <a href="#" class="logo">Travel Planner</a>
+            <nav class="nav">
+                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" href="/destinations">Destinations</a>
+                <a class="nav-link" href="/hotels_display">Hotels</a>
+                <a class="nav-link" href="/cart">My Cart</a>
+                <a class="nav-link" href="/profile">Profile</a>
+                {% if session['role'] != 'admin' %}
+                    <a class="nav-link" href="/ticket">View Tickets</a>
+                {% endif %}
+                {% if session['role'] == 'admin' %}
+                    <a class="nav-link" href="/admin/tickets">View Tickets</a>
+                {% endif %}
+                <a class="nav-link" href="/signout">Signout</a>
+            </nav>
+        </div>
+    <h2>Submit a New Ticket</h2>
+    <form method="POST">
+
+        <textarea name="complaint" placeholder="Describe your issue" required></textarea><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <hr>
+
+    <h2>Your Existing Tickets</h2>
+    {% if tickets %}
+        <table>
+            <tr>
+                <th>Ticket ID</th>
+                <th>Issue</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket.id }}</td>
+                <td>{{ ticket.complaint }}</td>
+                <td>{{ ticket.status }}</td>
+                <td>
+                    {% if ticket.status == 'open' %}
+                        <a href="{{ url_for('chat', ticket_id=ticket.id) }}" class="chat-link">Chat</a>
+                    {% else %}
+                        <span class="chat-closed">Chat Closed</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No existing tickets found.</p>
+    {% endif %}
+</body>
+</html>

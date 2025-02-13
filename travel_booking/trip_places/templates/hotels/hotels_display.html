@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hotel Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/hotels.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <a class="navbar-brand" href="/home">Travel Planner</a>
+            <div class="navbar-nav ml-auto">
+                <a class="nav-item nav-link" href="/">Home</a>
+                <a class="nav-link" href="/destinations">Destinations</a>
+                <a class="nav-link active" href="/hotels_display">Hotels</a>
+                <a class="nav-link" href="/cart">My Cart</a>
+                <a class="nav-item nav-link" href="/profile">Profile</a>
+                <a class="nav-item nav-link" href="/signout">Sign Out</a>
+                {% if session['role'] == 'admin' %}
+<!--                Make sure that the role settings should be correct i.e admin-->
+                    <a class="nav-item nav-link btn btn-outline-success" href="/hotels/add">Add Hotel</a>
+                {% endif %}
+
+            </div>
+        </nav>
+
+        <!-- Search Bar Section -->
+        <div class="search-container mt-5">
+            <form id="search-form" class="search-bar">
+                <div class="form-row">
+                    <div class="col-md-3 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control" name="search_term" id="search_term" placeholder="Enter destination or hotel name">
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="date" class="form-control" name="check_in" id="check_in" placeholder="Check-in">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="date" class="form-control" name="check_out" id="check_out" placeholder="Check-out">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <select class="form-control" name="people" id="people">
+                            <option value="1">1 Person</option>
+                            <option value="2">2 People</option>
+                            <option value="3">3 People</option>
+                            <option value="4">4 People</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <button type="submit" class="btn btn-primary btn-block">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Hotels Display Section -->
+        <div class="container mt-4">
+            <h1 class="mb-4">Hotels</h1>
+            <div class="row" id="hotels-list">
+                <!-- Hotels will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script>
+        // Function to load hotels with filters
+        function loadHotels(searchTerm = '', checkIn = '', checkOut = '', people = 1) {
+            $.ajax({
+                url: '/hotel_results',
+                method: 'GET',
+                data: {
+                    search_term: searchTerm,
+                    check_in: checkIn,
+                    check_out: checkOut,
+                    people: people
+                },
+                success: function(response) {
+                    $('#hotels-list').empty();  // Clear previous results
+
+                    if (response.hotels && response.hotels.length > 0) {
+                        response.hotels.forEach(hotel => {
+                            const hotelCard = `
+                                <div class="col-lg-4 col-md-6 mb-4">
+                                    <div class="card hotel-card">
+                                        <img src="/static/images/travel.jpg" class="card-img-top" alt="${hotel.name}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${hotel.name}</h5>
+                                            <p class="card-text">${hotel.location}</p>
+                                            <p class="card-text">${hotel.place}</p>
+                                            <p class="card-text">
+                                                <span class="badge badge-primary">${hotel.price_per_night} per night</span>
+                                            </p>
+                                            {% if session['role'] == 'user' %}
+                                            <form method="POST" action="/cart/add">
+                                                <input type="hidden" name="hotel_id" value="${hotel.id}">
+                                                <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
+                                            </form>
+                                            {% endif %}
+                                            {% if session['role'] == 'admin' %}
+                                                <form method="POST" action="/hotels/remove/ {{ hotels.id }}">
+                                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Remove</button>
+                                                </form>
+                                            {% endif %}
+
+                                        </div>
+                                    </div>
+                                </div>`;
+                            $('#hotels-list').append(hotelCard);
+                        });
+                    } else {
+                        $('#hotels-list').html('<p class="text-center">No hotels found for the given search criteria.</p>');
+                    }
+                },
+                error: function(err) {
+                    console.error('Error:', err);
+                    $('#hotels-list').html('<p class="text-center text-danger">An error occurred while fetching hotel data.</p>');
+                }
+            });
+        }
+
+        // Load all hotels on page load
+        $(document).ready(function() {
+            loadHotels();  // Load all hotels initially
+
+            // Handle form submission for search
+            $('#search-form').on('submit', function(event) {
+                event.preventDefault();  // Prevent page reload
+                const searchTerm = $('#search_term').val().trim();
+                const checkIn = $('#check_in').val();
+                const checkOut = $('#check_out').val();
+                const people = $('#people').val();
+                loadHotels(searchTerm, checkIn, checkOut, people);  // Load hotels with filters
+            });
+
+            // Detect when the search input is cleared and reload all hotels
+            $('#search_term').on('input', function() {
+                const searchTerm = $(this).val().trim();
+                if (!searchTerm) {
+                    loadHotels();  // Reload all hotels if search input is cleared
+                }
+            });
+        });
+    </script>
+</body>
+</html>

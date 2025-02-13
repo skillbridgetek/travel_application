@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='chat.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <a href="#" class="logo">Travel Planner</a>
+            <nav class="nav">
+                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" href="/destinations">Destinations</a>
+                <a class="nav-link" href="/hotels_display">Hotels</a>
+                <a class="nav-link" href="/cart">My Cart</a>
+                <a class="nav-link" href="/profile">Profile</a>
+                {% if session['role'] != 'admin' %}
+                    <a class="nav-link" href="/ticket">View Tickets</a>
+                {% endif %}
+                {% if session['role'] == 'admin' %}
+                    <a class="nav-link" href="/admin/tickets">View Tickets</a>
+                {% endif %}
+                <a class="nav-link" href="/signout">Signout</a>
+            </nav>
+        </div>
+
+    <h2>Chat for Ticket #{{ ticket_id }}</h2>
+
+    <div class="chat-container">
+        <div id="chat-box"></div>
+
+        <div class="chat-input">
+            <input type="text" id="message" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        var socket = io();
+        var ticketId = "{{ ticket_id }}";
+
+        socket.emit('join_room', {'ticket_id': ticketId});
+
+        function sendMessage() {
+            var msg = document.getElementById("message").value;
+            socket.emit('send_message', {'ticket_id': ticketId, 'message': msg});
+            document.getElementById("message").value = '';  // Clear input after sending
+        }
+
+        // Load previous messages but filter out system messages
+        window.onload = function() {
+            var messages = {{ messages | tojson }};
+            var chatBox = document.getElementById("chat-box");
+
+            messages.forEach(function(msg) {
+                if (msg[0] !== "System") {  // Ignore system messages
+                    var newMessage = document.createElement("p");
+                    newMessage.classList.add("chat-message");
+
+                    if (msg[0] === "Admin") {
+                        newMessage.classList.add("admin-message");
+                    } else {
+                        newMessage.classList.add("user-message");
+                    }
+
+                    newMessage.innerHTML = `<strong>${msg[0]}:</strong> ${msg[1]}`;
+                    chatBox.appendChild(newMessage);
+                    chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll
+                }
+            });
+        };
+
+        // Handle real-time messages and ignore system messages
+        socket.on('message', function(data) {
+            var chatBox = document.getElementById("chat-box");
+
+            if (data.sender === "System") {
+                return;  // Ignore system messages
+            }
+
+            var newMessage = document.createElement("p");
+            newMessage.classList.add("chat-message");
+
+            if (data.sender === "Admin") {
+                newMessage.classList.add("admin-message");
+            } else {
+                newMessage.classList.add("user-message");
+            }
+
+            newMessage.innerHTML = `<strong>${data.sender}:</strong> ${data.message}`;
+            chatBox.appendChild(newMessage);
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll
+        });
+    </script>
+</body>
+</html>

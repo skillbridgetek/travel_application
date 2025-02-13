@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/search_results.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="navbar justify-content-end mb-5">
+            <ul class="nav">
+                {% if session['role'] == 'user' or session['role'] == 'admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/destinations">Destinations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signout">Signout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/destinations">Destinations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signin">Sign In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signup">Sign Up</a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </div>
+
+        <div class="container h-75">
+            <div style="width:100%; margin-top: 3em;">
+                <form action="/results" method="GET">
+                    <div class="form-group" style="position: relative; display: flex; align-items: center;">
+                        <input type="search" name="search_term" autofocus class="form-control" id="exampleInputSearch" value="{{ search_term }}" placeholder="Search for places..." style="flex-grow: 1;">
+                        <button type="button" class="clear-btn" id="clear-btn">&times;</button>
+                        <button type="submit" style="margin-left: 5px;" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+
+            </div>
+
+            <div class="container">
+    <div class="card-container">
+                {% if places %}
+                    {% for place in places %}
+                        <div class="card book">
+                            <img src="{{ url_for('static', filename='bg.jpg') }}" class="card-img-top" alt="{{ place.name }}">
+                            <div class="card-body">
+                                <h5 class="card-title"><a href="/places/{{ place.place_id }}">{{ place.name }}</a></h5>
+                                <h8 class="card-title"><a href="/places/{{ place.place_id }}">{{ place.location }}</a></h8>
+                                <p class="card-text bookdesc">{{ place.description }}</p>
+
+                        </div>
+
+                    {% endfor %}
+                {% else %}
+                    <p>No places found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+        document.getElementById('clear-btn').addEventListener('click', function() {
+            document.getElementById('exampleInputSearch').value = '';
+        });
+    </script>
+</body>
+</html>

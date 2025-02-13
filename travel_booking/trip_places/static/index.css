@@ -1,0 +1,259 @@
+/* Basic reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Container */
+.container {
+    width: 85%;
+    margin: 0 auto;
+}
+
+/* Header styling */
+.header {
+    background-color: #0288d1; /* A softer blue color */
+    padding: 15px 0;
+    border-bottom: 2px solid #0277bd;
+}
+
+.header .logo {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+}
+
+.header .nav {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Pushes the navigation to the right */
+}
+
+.header .nav .nav-link {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: 500;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.header .nav .nav-link:hover {
+    color: #e0e0e0;
+}
+
+.header .nav .signin, .header .nav .signup {
+    background-color: #005a91;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+.header .nav .signin:hover, .header .nav .signup:hover {
+    background-color: #004080;
+    color: #fff;
+}
+
+/* Places section (now above hero section) */
+.places-section {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.places-section h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.places-section p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.places-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.place-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    overflow: hidden;
+    text-align: left;
+    width: 250px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.place-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.place-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.place-card h3 {
+    font-size: 22px;
+    margin: 10px;
+    color: #333;
+}
+
+.place-card p {
+    font-size: 16px;
+    margin: 0 10px 10px;
+    color: #555;
+}
+
+/* Hero section */
+.hero {
+    background-color: #e1f5fe;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px; /* Increased padding for better alignment */
+    margin-bottom: 30px; /* Space between search bar and places section */
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #0277bd; /* Darker blue for contrast */
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Search form styling */
+.search-form {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.input-wrapper input[type="text"] {
+    padding: 15px 20px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 120px;
+    transition: border-color 0.3s ease;
+}
+
+.input-wrapper input[type="text"]:focus {
+    border-color: #0288d1;
+    outline: none;
+}
+
+.search-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 20px;
+    background-color: #0288d1;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-btn:hover {
+    background-color: #0277bd;
+}
+
+/* Search options styling */
+.search-options {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.option {
+    color: #0288d1; /* Increased contrast for better readability */
+    font-weight: 500;
+    text-decoration: none;
+    margin: 0 15px;
+    padding-bottom: 5px;
+    font-size: 16px;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.option:hover, .option:focus {
+    border-bottom: 2px solid #0288d1;
+    color: #01579b;
+}
+
+/* Footer styling */
+.footer {
+    background-color: #0288d1;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 50px;
+}
+
+.footer .social-links {
+    margin-top: 10px;
+}
+
+.footer .social-link {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.footer .social-link:hover {
+    color: #ddd;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .header .container {
+        flex-direction: column;
+    }
+
+    .header .nav {
+        margin-top: 10px;
+    }
+
+    .hero-title {
+        font-size: 36px;
+    }
+
+    .place-card {
+        width: 100%;
+    }
+}
+

@@ -1,0 +1,66 @@
+/* General styling for the body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+
+/* Styling for the navbar */
+.navbar {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the container */
+.container {
+    margin-top: 20px;
+}
+
+/* Styling for the card */
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 10px;
+}
+
+/* Styling for the card image */
+.card-img-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    max-height: 400px;
+    object-fit: cover;
+}
+
+/* Styling for the card body */
+.card-body {
+    padding: 20px;
+}
+
+/* Styling for the card title */
+.card-title {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+/* Styling for the card text */
+.card-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* Styling for the location text */
+.card-text strong {
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-title {
+        font-size: 1.5rem;
+    }
+
+    .card-text {
+        font-size: 1rem;
+    }
+}
