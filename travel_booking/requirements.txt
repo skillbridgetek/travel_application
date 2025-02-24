@@ -1,2 +1,10 @@
 flask
-psycopg2
+Flask
+Flask-SocketIO
+stripe
+twilio
+logging
+functools
+datetime
+requests
+werkzeug
